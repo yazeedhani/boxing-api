@@ -56,9 +56,9 @@ router.get('/boxers/:id', (req, res, next) => {
 })
 
 // CREATE
-// POST /examples
+// POST /boxers
 router.post('/boxers', (req, res, next) => {
-	// set owner of new example to be current user
+	// set owner of new boxer to be current user
 	// req.body.boxer.owner = req.user.id
 
 	Boxer.create(req.body.boxer)
