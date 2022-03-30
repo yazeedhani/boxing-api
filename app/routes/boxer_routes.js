@@ -28,7 +28,7 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 const router = express.Router()
 
 // INDEX
-// GET /examples
+// GET /boxers
 router.get('/boxers', (req, res, next) => {
 	Boxer.find()
 		.then((boxers) => {
@@ -37,7 +37,7 @@ router.get('/boxers', (req, res, next) => {
 			// apply `.toObject` to each one
 			return boxers.map((boxer) => boxer.toObject())
 		})
-		// respond with status 200 and JSON of the examples
+		// respond with status 200 and JSON of the boxers
 		.then((boxers) => res.status(200).json({ boxers: boxers }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
