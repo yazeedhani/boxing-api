@@ -62,7 +62,7 @@ router.post('/boxers', (req, res, next) => {
 	// req.body.boxer.owner = req.user.id
 
 	Boxer.create(req.body.boxer)
-		// respond to succesful `create` with status 201 and JSON of new "example"
+		// respond to succesful `create` with status 201 and JSON of new "boxer"
 		.then((boxer) => {
 			res.status(201).json({ boxer: boxer.toObject() })
 		})
