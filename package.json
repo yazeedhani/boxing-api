@@ -1,0 +1,32 @@
+{
+  "name": "boxing-api",
+  "version": "1.0.0",
+  "description": "This is an API server that serves information about boxers",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yazeedhani/boxing-api.git"
+  },
+  "keywords": [],
+  "author": "Yazeed Hani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yazeedhani/boxing-api/issues"
+  },
+  "homepage": "https://github.com/yazeedhani/boxing-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "method-override": "^3.0.0",
+    "mongodb": "^4.4.1",
+    "mongoose": "^6.2.9"
+  }
+}
