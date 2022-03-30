@@ -96,14 +96,14 @@ router.patch('/boxers/:id', removeBlanks, (req, res, next) => {
 })
 
 // DESTROY
-// DELETE /examples/5a7db6c74d55bc51bdf39793
+// DELETE /boxers/5a7db6c74d55bc51bdf39793
 router.delete('/boxers/:id', (req, res, next) => {
 	Boxer.findById(req.params.id)
 		.then(handle404)
 		.then((boxer) => {
-			// throw an error if current user doesn't own `example`
+			// throw an error if current user doesn't own `boxer`
 			// requireOwnership(req, boxer)
-			// delete the example ONLY IF the above didn't throw
+			// delete the boxer ONLY IF the above didn't throw
 			boxer.deleteOne()
 		})
 		// send back 204 and no content if the deletion succeeded
