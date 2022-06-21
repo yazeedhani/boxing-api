@@ -14,6 +14,7 @@ const customErrors = require('../../lib/custom_errors')
 const handle404 = customErrors.handle404
 // we'll use this function to send 401 when a user tries to modify a resource
 // that's owned by someone else
+// Middleware that can send a 401 when a user tries to access something they do not own - AUTHORIZATION
 const requireOwnership = customErrors.requireOwnership
 
 // this is middleware that will remove blank fields from `req.body`, e.g.
@@ -27,14 +28,16 @@ const removeBlanks = require('../../lib/remove_blank_fields')
 // instantiate a router (mini app that only handles routes)
 const router = express.Router()
 
-// INDEX
-// GET /boxers
+/******************** ROUTES *******************/
+
+// INDEX -> GET /boxers
 router.get('/boxers', (req, res, next) => {
 	Boxer.find()
 		.then((boxers) => {
-			// `boxers` will be an array of Mongoose documents
-			// we want to convert each one to a POJO, so we use `.map` to
+			// `boxers` will be an array of Mongoose documents - these are stored in mongoDB as BSON
+			// we want to convert each one to a POJO from BSON, so we use `.map`  to
 			// apply `.toObject` to each one
+            // map returns a new array
 			return boxers.map((boxer) => boxer.toObject())
 		})
 		// respond with status 200 and JSON of the boxers
@@ -43,20 +46,18 @@ router.get('/boxers', (req, res, next) => {
 		.catch(next)
 })
 
-// SHOW
-// GET /examples/5a7db6c74d55bc51bdf39793
+// SHOW -> GET /boxers/5a7db6c74d55bc51bdf39793
 router.get('/boxers/:id', (req, res, next) => {
 	// req.params.id will be set based on the `:id` in the route
 	Boxer.findById(req.params.id)
 		.then(handle404)
-		// if `findById` is succesful, respond with 200 and "boxer" JSON
+		// if `findById` is succesful, respond with 200 and "boxer" as JSON
 		.then((boxer) => res.status(200).json({ boxer: boxer.toObject() }))
 		// if an error occurs, pass it to the handler
 		.catch(next)
 })
 
-// CREATE
-// POST /boxers
+// CREATE -> POST /boxers
 router.post('/boxers', (req, res, next) => {
 	// set owner of new boxer to be current user
 	// req.body.boxer.owner = req.user.id
@@ -72,8 +73,8 @@ router.post('/boxers', (req, res, next) => {
 		.catch(next)
 })
 
-// UPDATE
-// PATCH /examples/5a7db6c74d55bc51bdf39793
+// UPDATE -> PATCH /boxers /5a7db6c74d55bc51bdf39793
+// removeBlanks removes blank fields from req.body so you won't overwrite existing field values with an empty string
 router.patch('/boxers/:id', removeBlanks, (req, res, next) => {
 	// if the client attempts to change the `owner` property by including a new
 	// owner, prevent that by deleting that key/value pair
@@ -83,6 +84,7 @@ router.patch('/boxers/:id', removeBlanks, (req, res, next) => {
 		.then(handle404)
 		.then((boxer) => {
 			// pass the `req` object and the Mongoose record to `requireOwnership`
+            // requireOwnership requires requireToken so it can get the owner ID
 			// it will throw an error if the current user isn't the owner
 			// requireOwnership(req, boxer)
 
@@ -95,8 +97,7 @@ router.patch('/boxers/:id', removeBlanks, (req, res, next) => {
 		.catch(next)
 })
 
-// DESTROY
-// DELETE /boxers/5a7db6c74d55bc51bdf39793
+// DESTROY -> DELETE /boxers/5a7db6c74d55bc51bdf39793
 router.delete('/boxers/:id', (req, res, next) => {
 	Boxer.findById(req.params.id)
 		.then(handle404)
@@ -112,4 +113,7 @@ router.delete('/boxers/:id', (req, res, next) => {
 		.catch(next)
 })
 
+/***********************************************/
+
+// Keep at bottom of file
 module.exports = router

@@ -3,8 +3,13 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors') // is how you allow or disallow access to your API
 
+// require Apollo Server
+const { ApolloServer } = require("apollo-server")
+const { typeDefs } = require('./schema/type-defs')
+const { resolvers } = require('./schema/resolvers')
+
 // require route files
-const boxerRoutes = require('./app/routes/boxer_routes')
+// const boxerRoutes = require('./app/routes/boxer_routes')
 // const userRoutes = require('./app/routes/user_routes')
 
 // require middleware
@@ -30,6 +35,8 @@ const clientDevPort = 3000
 mongoose.connect(db, {
 	useNewUrlParser: true,
 })
+	.then( () => console.log('MongoDB Connected.'))
+	.catch( (error) => console.log(error))
 
 // instantiate express application object
 const app = express()
@@ -65,7 +72,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(requestLogger)
 
 // register route files
-app.use(boxerRoutes)
+// app.use(boxerRoutes)
 // app.use(userRoutes)
 
 // register error handling middleware
@@ -80,3 +87,16 @@ app.listen(port, () => {
 
 // needed for testing
 module.exports = app
+
+// const server = new ApolloServer({
+// 	typeDefs,
+// 	resolvers,
+// 	context: ({req}) => {
+// 		return {req: req}
+// 	}
+// })
+
+// server.listen({ port: 8000 })
+// 	.then(({ url }) => {
+// 		console.log(`🚀  Server ready at ${url}`)
+//   	})

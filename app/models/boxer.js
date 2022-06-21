@@ -6,6 +6,10 @@ const boxerSchema = new mongoose.Schema(
 			type: String,
 			required: true,
 		},
+		nationality: {
+			type: String,
+			require: true
+		},
 		record: {
 			type: String,
 			required: true,
