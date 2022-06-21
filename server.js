@@ -81,22 +81,22 @@ app.use(requestLogger)
 app.use(errorHandler)
 
 // run API on designated port (4741 in this case)
-app.listen(port, () => {
-	console.log('listening on port ' + port)
+// app.listen(port, () => {
+// 	console.log('listening on port ' + port)
+// })
+
+const server = new ApolloServer({
+	typeDefs,
+	resolvers,
+	context: ({req}) => {
+		return {req: req}
+	}
 })
+
+server.listen({ port: 8000 })
+	.then(({ url }) => {
+		console.log(`🚀  Server ready at ${url}`)
+  	})
 
 // needed for testing
 module.exports = app
-
-// const server = new ApolloServer({
-// 	typeDefs,
-// 	resolvers,
-// 	context: ({req}) => {
-// 		return {req: req}
-// 	}
-// })
-
-// server.listen({ port: 8000 })
-// 	.then(({ url }) => {
-// 		console.log(`🚀  Server ready at ${url}`)
-//   	})
