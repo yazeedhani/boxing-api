@@ -1,6 +1,27 @@
 // Require Boxer mongoose model
 const Boxer = require('./../app/models/boxer')
 
+const validateName = (name) => {
+
+    if(name === '')
+    {
+        console.log('NAME IS EMPTY.')
+        return false
+    }
+    else if(name === ' ')
+    {
+        console.log('NAME IS ONLY A SPACE CHARACTER')
+        return false
+    }
+    else if(/[0-9]/g.test(name))
+    {
+        console.log('NAME CONTAINS NUMBERS.')
+        return false
+    }
+
+    return true
+}
+
 const resolvers = {
     Query: {
         boxers: async (parent, args, context) => {
@@ -17,8 +38,18 @@ const resolvers = {
 
     Mutation: {
         createBoxer: async (parent, args, context) => {
-            console.log('BOXER CREATED.')
-            return await Boxer.create(args.input)
+            console.log('BOXER CREATED: ', args.input)
+
+            let validName = validateName(args.input.name)
+
+            if(validName)
+            {
+                return await Boxer.create(args.input)
+            }
+            else
+            {
+                console.log('NAME NOT VALID.')
+            }
         },
 
         deleteBoxer: async (parent, args, context) => {
@@ -42,4 +73,4 @@ const resolvers = {
     }
 }
 
-module.exports = { resolvers }
+module.exports = { resolvers, validateName }

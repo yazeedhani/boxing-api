@@ -1,0 +1,15 @@
+version: "2"
+services:
+  app:
+    container_name: boxingGraphQLAPI
+    restart: always
+    build: .
+    ports:
+      - "8000:8000"
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongod
+    ports:
+      - "27017:27017"
