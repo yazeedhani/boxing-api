@@ -11,13 +11,33 @@ const typeDefs = gql`
         nationality: String!
     }
 
+    ###### INPUTS ######
+    input NewBoxerInfo {
+        name: String!
+        record: String!
+        nationality: String!
+        active: Boolean!
+    }
+
+    input UpdateBoxerInfo {
+        id: ID!
+        newName: String!
+        newRecord: String!
+        newNationality: String
+        newActivity: Boolean!
+    }
+
     ###### REQUESTS ######
     type Query {
         boxers: [Boxer!]!
-        boxer: Boxer!
+        boxer(id: ID!): Boxer!
     }
 
-    
+    type Mutation {
+        createBoxer(input: NewBoxerInfo!): Boxer
+        deleteBoxer(id: ID!): Boxer
+        updateBoxer(input: UpdateBoxerInfo): Boxer
+    }    
 `
 
 module.exports = { typeDefs }
